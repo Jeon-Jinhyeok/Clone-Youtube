@@ -4,7 +4,7 @@
   "description": "Youtube Clone Coding",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon --exec babel-node src/server.js",
+    "dev": "nodemon --exec babel-node src/init.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
