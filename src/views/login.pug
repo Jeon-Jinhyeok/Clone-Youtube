@@ -1,0 +1,18 @@
+extends base
+
+block content
+    if error 
+       span=error 
+    form(method="POST")
+
+        label(for="username") Username
+            input(name="username", id="username" required, placeholder="Nickname", type="text")
+
+        label(for="password") Password
+            input(name="password", id="password" required, placeholder="10 ~ 20 characters, including at least one uppercase letter, one number, and one special character.", type="password")         
+
+        input(type="submit", value="Login")
+    hr
+    div 
+        span Don't have an account? 
+        a(href="/join") Create now
