@@ -34,18 +34,56 @@ export const postLogin = async (req, res) => {
 	return res.redirect("/");
 };
 
-export const githubLogin = (req, res) => {
-	const baseURL = `https://github.com/login/oauth/authorize`
+export const startGithubLogin = (req, res) => {
+	const baseURL = `https://github.com/login/oauth/authorize`;
 	const config = {
-		client_id: "Ov23litGEqXXX2Sa000e",
-		scope:"read:user user:email"
-	}
-	const params = new URLSearchParams(config).toString()
-	const url = `${baseURL}?${params}`
-	return res.redirect(url)
+		client_id: process.env.GH_CLIENT,
+		scope: "read:user user:email",
+	};
+	const params = new URLSearchParams(config).toString();
+	const url = `${baseURL}?${params}`;
+	return res.redirect(url);
+};
 
-}
-export const logout = (req, res) => res.send("Logout");
+export const finishGithubLogin = async (req, res) => {
+	const baseURL = "https://github.com/login/oauth/access_token";
+	const config = {
+		client_id: process.env.GH_CLIENT,
+		client_secret: process.env.GH_SECRET,
+		code: req.query.code,
+	};
+
+	const params = new URLSearchParams(config).toString();
+	const finalUrl = `${baseURL}?${params}`;
+
+	const tokenRequest = await (
+		await fetch(finalUrl, {
+			method: "POST",
+			headers: {
+				Accept: "application/json",
+			},
+		})
+	).json();
+
+	if ("access_token" in tokenRequest) {
+		const { access_token } = tokenRequest;
+		const userRequest = await (
+			await fetch("https://api.github.com/user", {
+				headers: {
+					Authorization: `token ${access_token}`,
+				},
+			})
+		).json();
+	} else {
+		return res.redirect("/login");
+	}
+};
+
+export const logout = (req, res) => {
+	req.session.destroy();
+	req.flash("info", "Bye Bye");
+	return res.redirect("/");
+};
 
 export const getJoin = (req, res) => {
 	res.render("join", { pageTitle: "Join" });

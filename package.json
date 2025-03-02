@@ -26,6 +26,8 @@
     "express-session": "^1.18.1",
     "mongoose": "^8.10.0",
     "morgan": "^1.10.0",
+    "node-fecth": "^0.0.1-security",
+    "node-fetch": "^3.3.2",
     "pug": "^3.0.3",
     "validator": "^13.12.0"
   },
